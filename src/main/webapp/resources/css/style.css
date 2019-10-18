@@ -1,0 +1,20 @@
+#form {
+	width: 100vw;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center
+}
+
+table {
+	align-items: center;
+	border: 0;
+	border: 1px solid #CAD6E0;
+	vertical-align: middle;
+}
+
+td {
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}

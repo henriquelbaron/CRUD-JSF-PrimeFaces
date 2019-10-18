@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Cadastro</title>
+	<h:outputStylesheet library="css" name="style.css" />
+	<!-- 	<h:outputScript library="js" name="script.js" />-->
+</h:head>
+<h:body>
+	<h:form>
+		<p:menubar>
+			<p:submenu label="Cadastros">
+				<p:menuitem value="Usuarios" outcome="CadastroPessoa" />
+				<p:menuitem value="Profissões" outcome="CadastroProfissao" />
+			</p:submenu>
+		</p:menubar>
+	</h:form>
+	<div id="content">
+		<h:form id="form">
+			<p:messages globalOnly="true" />
+			<p:panelGrid columns="2" id="matchGrid">
+				<f:facet name="header">Cadastro</f:facet>
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" value="#{user.user.nome}" />
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" value="#{user.user.email}" />
+
+				<p:outputLabel for="profissao" value="Profissão" />
+				<p:selectOneMenu id="profissao" value="#{user.user.profession}">
+					<p:message for="profissao" />
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione sua Profissão" />
+					<f:selectItems value="#{user.professions}" />
+					<f:converter binding="#{professionConverter}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Senha" for="pwd1" />
+				<p:password id="pwd1" value="#{user.user.senha}" match="pwd2" />
+
+				<p:outputLabel value="Confirmar Senha" for="pwd2" />
+				<p:password id="pwd2" value="#{user.senha2}" required="true" />
+
+				<p:outputLabel value="Data de Nascimento" for="nascimento" />
+				<p:calendar id="nascimento" value="#{user.user.nascimento}"
+					pattern="dd/MM/yyyy" required="true" />
+
+				<p:outputLabel value="Observações" for="observacoes" />
+				<p:inputTextarea id="observacoes" />
+				<f:facet name="footer">
+					<p:commandButton update="formTable:table form" value="Cadastrar"
+						action="#{user.add}" icon="fa fa-save" type="button" />
+				</f:facet>
+			</p:panelGrid>
+		</h:form>
+
+		<p:separator />
+		<h:form id="formTable">
+			<div class="table">
+				<p:dataTable id="table" var="u" value="#{user.users}"
+					widgetVar="userTable" emptyMessage="Não há Usuários Cadastrados"
+					filteredValue="#{user.userFilters}">
+					<f:facet name="header">
+            Usuário Cadastrados
+      				  </f:facet>
+					<p:ajax event="sort" skipChildren="false" />
+
+					<p:column headerText="Id" sortBy="#{u.id}">
+						<h:outputText value="#{u.id}" />
+					</p:column>
+
+					<p:column headerText="Nome" sortBy="#{u.nome}">
+						<h:outputText value="#{u.nome}" />
+					</p:column>
+
+					<p:column headerText="E-mail">
+						<h:outputText value="#{u.email}" />
+					</p:column>
+
+					<p:column headerText="Data de Nascimento">
+						<h:outputText value="#{u.nascimentoFormatado}">
+							<!-- <f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="#{initParam.timezone}" /> -->
+						</h:outputText>
+					</p:column>
+
+					<p:column filterBy="#{u.profession}" headerText="Profissão"
+						footerText="in" filterMatchMode="in">
+						<f:facet name="filter">
+							<p:selectCheckboxMenu label="Profissões"
+								onchange="PF('userTable').filter()">
+								<f:selectItems value="#{user.professions}" />
+							</p:selectCheckboxMenu>
+						</f:facet>
+						<h:outputText value="#{u.profession}" />
+					</p:column>
+
+					<p:column headerText="Idade">
+						<h:outputText value="#{u.idade}" />
+					</p:column>
+
+					<p:column headerText="Ações">
+
+						<p:commandLink ajax="false">
+							<p:graphicImage value="/resources/imagens/edit-32x32.png" />
+							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
+						</p:commandLink>
+
+						<p:commandLink action="#{user.delete}" ajax="false">
+							<p:graphicImage value="/resources/imagens/remove-32x32.png" />
+							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
+						</p:commandLink>
+					</p:column>
+
+				</p:dataTable>
+
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
