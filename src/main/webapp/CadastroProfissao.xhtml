@@ -28,9 +28,11 @@
 		<h:form styleClass="form" id="form">
 			<p:panelGrid columns="2">
 				<f:facet name="header">Cadastro</f:facet>
+				
 				<p:outputLabel value="Profissao" for="profissao" />
 				<p:inputText id="profissao"
 					value="#{profession.profession.descricao}" />
+					
 				<f:facet name="footer">
 					<p:commandButton update="formTable:table"
 						action="#{profession.add}" value="Cadastrar" />

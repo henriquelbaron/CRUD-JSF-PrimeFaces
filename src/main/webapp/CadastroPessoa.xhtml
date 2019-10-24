@@ -21,7 +21,7 @@
 	</h:form>
 	<div id="content">
 		<h:form id="form">
-			<p:messages globalOnly="true" />
+			<p:growl id="mensagens" />
 			<p:panelGrid columns="2" id="matchGrid">
 				<f:facet name="header">Cadastro</f:facet>
 
@@ -52,10 +52,12 @@
 
 				<p:outputLabel value="Observações" for="observacoes" />
 				<p:inputTextarea id="observacoes" />
+
 				<f:facet name="footer">
 					<p:commandButton update="formTable:table form" value="Cadastrar"
-						action="#{user.add}" icon="fa fa-save" type="button" />
+						action="#{user.add}" icon="fa fa-save" />
 				</f:facet>
+
 			</p:panelGrid>
 		</h:form>
 
@@ -64,13 +66,14 @@
 			<div class="table">
 				<p:dataTable id="table" var="u" value="#{user.users}"
 					widgetVar="userTable" emptyMessage="Não há Usuários Cadastrados"
-					filteredValue="#{user.userFilters}">
+					paginator="true" paginatorPosition="bottom" rows="10">
 					<f:facet name="header">
             Usuário Cadastrados
       				  </f:facet>
 					<p:ajax event="sort" skipChildren="false" />
 
-					<p:column headerText="Id" sortBy="#{u.id}">
+					<p:column headerText="Id" sortBy="#{u.id}"
+						styleClass="pessoa-td-id">
 						<h:outputText value="#{u.id}" />
 					</p:column>
 
@@ -89,8 +92,8 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column filterBy="#{u.profession}" headerText="Profissão"
-						footerText="in" filterMatchMode="in">
+					<p:column filterBy="#{u.profession.descricao}"
+						headerText="Profissão" filterMatchMode="in">
 						<f:facet name="filter">
 							<p:selectCheckboxMenu label="Profissões"
 								onchange="PF('userTable').filter()">
@@ -100,18 +103,19 @@
 						<h:outputText value="#{u.profession}" />
 					</p:column>
 
-					<p:column headerText="Idade">
+					<p:column headerText="Idade" styleClass="pessoa-td-idade">
 						<h:outputText value="#{u.idade}" />
 					</p:column>
 
-					<p:column headerText="Ações">
+					<p:column headerText="Ações" styleClass="pessoa-td-acoes">
 
 						<p:commandLink ajax="false">
 							<p:graphicImage value="/resources/imagens/edit-32x32.png" />
 							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
 						</p:commandLink>
 
-						<p:commandLink action="#{user.delete}" ajax="false">
+						<p:commandLink actionListener="#{user.delete}">
+							<p:ajax event="click" render="table mensagens" />
 							<p:graphicImage value="/resources/imagens/remove-32x32.png" />
 							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
 						</p:commandLink>

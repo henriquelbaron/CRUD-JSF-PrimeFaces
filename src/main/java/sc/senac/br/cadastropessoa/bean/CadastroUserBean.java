@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,7 +15,7 @@ import sc.senac.br.cadastropessoa.model.Profession;
 import sc.senac.br.cadastropessoa.model.User;
 
 @Named("user")
-@RequestScoped
+@ViewScoped
 public class CadastroUserBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;

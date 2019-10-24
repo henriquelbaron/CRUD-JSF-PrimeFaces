@@ -6,15 +6,25 @@
 	align-items: center
 }
 
-table {
-	align-items: center;
-	border: 0;
-	border: 1px solid #CAD6E0;
-	vertical-align: middle;
+.table {
+	width:1000px;
+	margin: auto;
 }
 
-td {
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+
+.pessoa-td-acoes {
+	text-align: center;
+	width: 100px;
+}
+.pessoa-td-profissao {
+	text-align: center;
+}
+
+.pessoa-td-idade{
+	text-align: center;
+	width: 80px;
+}
+.pessoa-td-id{
+	text-align: center;
+	width: 60px;
 }
