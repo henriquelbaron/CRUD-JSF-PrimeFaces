@@ -37,6 +37,6 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>/CadastroPessoa.xhtml</welcome-file>
+		<welcome-file>/dashboard.xhtml</welcome-file>
 	</welcome-file-list>
 </web-app>

@@ -17,7 +17,12 @@
 				<p:menuitem value="Usuarios" outcome="CadastroPessoa" />
 				<p:menuitem value="Profissões" outcome="CadastroProfissao" />
 			</p:submenu>
+			<p:menuitem value="Pagina Inicial" outcome="dashboard" />
+			<f:facet name="options">
+				<p:commandButton type="button" value="Sair" icon="fa fa-home" />
+			</f:facet>
 		</p:menubar>
+		<p:spacer height="30" />
 	</h:form>
 	<div id="content">
 		<h:form id="form">
@@ -56,28 +61,54 @@
 				<f:facet name="footer">
 					<p:commandButton update="formTable:table form" value="Cadastrar"
 						action="#{user.add}" icon="fa fa-save" />
+					<p:commandButton update="form" value="Limpar Campos"
+						process="@this" action="#{user.limpar}" icon="fa fa-recycle" />
 				</f:facet>
 
 			</p:panelGrid>
 		</h:form>
 
-		<p:separator />
+		<p:spacer height="30" />
 		<h:form id="formTable">
 			<div class="table">
 				<p:dataTable id="table" var="u" value="#{user.users}"
 					widgetVar="userTable" emptyMessage="Não há Usuários Cadastrados"
-					paginator="true" paginatorPosition="bottom" rows="10">
-					<f:facet name="header">
-            Usuário Cadastrados
-      				  </f:facet>
+					paginator="true" paginatorPosition="bottom" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+
+
+					<f:facet name="{Exporters}">
+						<div style="float: right; padding-top: 5px;">
+							<h:commandLink>
+								<p:graphicImage library="imagens" name="excel.png" width="24" />
+								<p:dataExporter type="xls" target="table" fileName="u" />
+							</h:commandLink>
+
+							<h:commandLink>
+								<p:graphicImage library="imagens" name="pdf.png" width="24" />
+								<p:dataExporter type="pdf" target="table" fileName="u" />
+							</h:commandLink>
+
+							<h:commandLink>
+								<p:graphicImage library="imagens" name="csv.png" width="24" />
+								<p:dataExporter type="csv" target="table" fileName="u" />
+							</h:commandLink>
+
+							<h:commandLink>
+								<p:graphicImage library="imagens" name="xml.png" width="24" />
+								<p:dataExporter type="xml" target="table" fileName="u" />
+							</h:commandLink>
+						</div>
+					</f:facet>
+
 					<p:ajax event="sort" skipChildren="false" />
 
-					<p:column headerText="Id" sortBy="#{u.id}"
-						styleClass="pessoa-td-id">
+					<p:column headerText="Id" styleClass="pessoa-td-id">
 						<h:outputText value="#{u.id}" />
 					</p:column>
 
-					<p:column headerText="Nome" sortBy="#{u.nome}">
+					<p:column headerText="Nome" filterMatchMode="contains"
+						filterBy="#{u.nome}">
 						<h:outputText value="#{u.nome}" />
 					</p:column>
 
@@ -107,23 +138,54 @@
 						<h:outputText value="#{u.idade}" />
 					</p:column>
 
-					<p:column headerText="Ações" styleClass="pessoa-td-acoes">
+					<p:column exportable="false" headerText="Ações"
+						styleClass="pessoa-td-acoes">
 
-						<p:commandLink ajax="false">
-							<p:graphicImage value="/resources/imagens/edit-32x32.png" />
-							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
-						</p:commandLink>
+						<p:commandButton icon="fa fa-pencil" update="form">
+							<f:setPropertyActionListener value="#{u}" target="#{user.user}" />
+						</p:commandButton>
 
-						<p:commandLink actionListener="#{user.delete}">
-							<p:ajax event="click" render="table mensagens" />
-							<p:graphicImage value="/resources/imagens/remove-32x32.png" />
-							<f:setPropertyActionListener target="#{user.user}" value="#{u}" />
-						</p:commandLink>
+						<p:commandButton icon="fa fa-trash" update="formTable:confirm"
+							oncomplete="PF('confirm').show()">
+							<f:setPropertyActionListener value="#{u}" target="#{user.user}" />
+						</p:commandButton>
 					</p:column>
 
 				</p:dataTable>
-
+				<p:confirmDialog id="confirm" widgetVar="confirm" header="Atenção!"
+					responsive="true" showEffect="fade" hideEffect="fade"
+					closeOnEscape="true"
+					message="Tem certeza que deseja excluir #{user.user.nome}?">
+					<p:commandButton value="Sim" icon="fa fa-check"
+						update="table  form:mensagens" action="#{user.delete}"
+						oncomplete="PF('confirm').hide()" />
+					<p:commandButton value="Não" icon="fa fa-times"
+						oncomplete="PF('confirm').hide(); return false;" />
+					<!-- /*return false é para não atualizar a pagina*/ -->
+				</p:confirmDialog>
 			</div>
+
+
+			<h3>Export Page Data Only</h3>
+			<h:commandLink>
+				<p:graphicImage library="imagens" name="excel.png" width="24" />
+				<p:dataExporter type="xls" target="table" fileName="u" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage library="imagens" name="pdf.png" width="24" />
+				<p:dataExporter type="pdf" target="table" fileName="u" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage library="imagens" name="csv.png" width="24" />
+				<p:dataExporter type="csv" target="table" fileName="u" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage library="imagens" name="xml.png" width="24" />
+				<p:dataExporter type="xml" target="table" fileName="u" />
+			</h:commandLink>
 		</h:form>
 	</div>
 </h:body>
